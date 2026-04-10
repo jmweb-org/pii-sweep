@@ -4,7 +4,7 @@ from pii_sweep.dataset import scan_file, scan_frame
 from pii_sweep.detectors import DETECTORS, Detector, Severity
 from pii_sweep.scan import ColumnFinding, has_pii, scan_column, scan_values
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "DETECTORS",
