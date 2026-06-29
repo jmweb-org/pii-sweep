@@ -53,6 +53,26 @@ def test_scan_json(tmp_path):
     assert result.exit_code == 0
     findings = json.loads(result.stdout)
     assert findings[0]["detector"] == "email"
+    assert "masked_sample" not in findings[0]
+
+
+def test_scan_json_can_include_masked_samples(tmp_path):
+    frame = pl.DataFrame({"email": ["alice@example.com", "bob@example.com"]})
+    path = _csv(tmp_path, "d.csv", frame)
+    result = runner.invoke(cli_module.app, ["scan", str(path), "--json", "--show-samples"])
+    assert result.exit_code == 0
+    findings = json.loads(result.stdout)
+    assert findings[0]["masked_sample"] == "a***@***.com"
+    assert "alice@example.com" not in result.stdout
+
+
+def test_scan_table_can_include_masked_samples(tmp_path):
+    frame = pl.DataFrame({"email": ["alice@example.com", "bob@example.com"]})
+    path = _csv(tmp_path, "d.csv", frame)
+    result = runner.invoke(cli_module.app, ["scan", str(path), "--show-samples"])
+    assert result.exit_code == 0
+    assert "a***@***.com" in result.stdout
+    assert "alice@example.com" not in result.stdout
 
 
 def test_scan_clean_dataset_reports_none(tmp_path):

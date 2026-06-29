@@ -35,6 +35,7 @@ Reads CSV, Parquet and JSON Lines through polars.
 ```console
 $ pii-sweep scan data.csv                 # human-readable table
 $ pii-sweep scan data.parquet --json      # machine-readable findings
+$ pii-sweep scan data.csv --show-samples  # include one masked example per finding
 $ pii-sweep scan data.csv --sample 5000   # cap values scanned per column
 $ pii-sweep scan data.csv --threshold 0.3 # flag at a lower match fraction
 $ pii-sweep scan data.csv --check         # exit non-zero if PII is found
@@ -62,7 +63,8 @@ Stop a dataset with PII from being committed or published:
 Detectors with a checksum (cards, IBAN) are strict, so a column of random
 13-digit numbers is not flagged as cards. The **confidence** is the fraction of
 sampled non-null values a detector matched; `--threshold` sets how high that
-must be to flag a column.
+must be to flag a column. Use `--show-samples` when you want one masked example
+per finding for review; raw values are not printed.
 
 ## Exit codes
 
