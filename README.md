@@ -24,7 +24,8 @@ medium    contact       email        91%
 ## Install
 
 ```console
-$ pip install pii-sweep
+$ pip install pii-sweep                 # from PyPI, once released
+$ pip install git+https://github.com/jmweb-org/pii-sweep   # latest, available now
 ```
 
 Reads CSV, Parquet and JSON Lines through polars.
