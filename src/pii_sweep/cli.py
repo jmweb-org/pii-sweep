@@ -69,6 +69,11 @@ def scan(
     ),
     sample: int = typer.Option(0, "--sample", help="Sample at most N values per column (0 = all)."),
     as_json: bool = typer.Option(False, "--json", help="Emit findings as JSON."),
+    show_samples: bool = typer.Option(
+        False,
+        "--show-samples",
+        help="Show one masked sample value for each finding.",
+    ),
     check: bool = typer.Option(False, "--check", help="Exit non-zero if PII is found."),
     fail_on: FailOn = typer.Option(
         FailOn.low, "--fail-on", help="Lowest severity that --check treats as PII."
@@ -83,9 +88,9 @@ def scan(
         raise typer.Exit(EXIT_BAD_INPUT) from exc
 
     if as_json:
-        _out.print_json(json.dumps(findings_to_json(findings)))
+        _out.print_json(json.dumps(findings_to_json(findings, show_samples=show_samples)))
     else:
-        _out.print(render_table(findings))
+        _out.print(render_table(findings, show_samples=show_samples))
 
     if check and has_pii(findings, _FAIL_SEVERITY[fail_on]):
         raise typer.Exit(EXIT_PII_FOUND)

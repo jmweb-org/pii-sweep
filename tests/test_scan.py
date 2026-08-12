@@ -34,6 +34,17 @@ def test_scan_column_sets_severity_and_sampled():
     assert findings[0].sampled == 2
 
 
+def test_scan_column_stores_masked_sample_without_raw_value():
+    findings = scan_column("email", ["alice@example.com", "bob@example.com"], threshold=0.5)
+    assert findings[0].masked_sample == "a***@***.com"
+    assert "alice" not in findings[0].masked_sample
+
+
+def test_scan_column_masks_numeric_samples():
+    findings = scan_column("card", ["4242 4242 4242 4242"], threshold=0.5)
+    assert findings[0].masked_sample == "***4242"
+
+
 def test_scan_column_respects_sample():
     values = ["a@x.com"] * 100
     findings = scan_column("c", values, sample=10)
