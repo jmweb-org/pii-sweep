@@ -40,6 +40,35 @@ $ pii-sweep scan data.csv --threshold 0.3 # flag at a lower match fraction
 $ pii-sweep scan data.csv --check         # exit non-zero if PII is found
 ```
 
+### JSON output
+
+Pass `--json` to emit a machine-readable array of findings for scripting and CI:
+
+```console
+$ pii-sweep scan customers.csv --json
+[
+  {
+    "column": "email",
+    "detector": "email",
+    "severity": "medium",
+    "confidence": 1.0,
+    "sampled": 100
+  }
+]
+```
+
+Each finding object contains:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `column` | string | Name of the column that matched a detector. |
+| `detector` | string | Detector that matched the sampled values, such as `email` or `credit_card`. |
+| `severity` | string | Detector severity: `high`, `medium`, or `low`. |
+| `confidence` | number | Fraction of sampled non-null values that matched the detector, rounded to 4 decimal places. |
+| `sampled` | integer | Number of non-null values sampled for that column. |
+
+An empty array means no columns met the configured `--threshold`.
+
 ### In CI
 
 Stop a dataset with PII from being committed or published:
